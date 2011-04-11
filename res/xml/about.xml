@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <Preference
+     android:key="software_version"
+     style="?android:preferenceInformationStyle"
+     android:title="Version"
+     android:summary="0.1" />
+    
+    <Preference
+        android:key="author"
+        style="?android:preferenceInformationStyle"
+        android:title="Author"
+        android:summary="João Pedro Taveira &lt;joao.p.taveira@gmail.com&gt;" />
+                
+    <Preference
+        android:key="issues"
+        style="?android:preferenceInformationStyle"
+        android:title="Bugs &amp; Features"
+        android:summary="joao.p.taveira@gmail.com" />
+    
+</PreferenceScreen>

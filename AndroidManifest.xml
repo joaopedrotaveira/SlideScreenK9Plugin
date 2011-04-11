@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.taveiranet.slidescreen.k9" android:versionCode="1"
+	android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="3" />
+
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+
+		<activity android:name=".preference.SlideK9PluginPreferences"
+			android:configChanges="orientation|keyboardHidden" android:label="@string/preferences_label"
+			android:exported="true" />
+
+		<activity android:name=".preference.AboutActivity"
+			android:configChanges="orientation|keyboardHidden" android:label="@string/about_label"
+			android:exported="true" />
+
+		<receiver android:exported="true"
+			android:name="com.taveiranet.slidescreen.k9.SlidescreenReceiver">
+			<intent-filter>
+				<action android:name="com.larvalabs.slidescreen.DISCOVER_PLUGINS" />
+			</intent-filter>
+		</receiver>
+		<provider android:name="com.taveiranet.slidescreen.k9.SlideK9ContentProvider"
+			android:authorities="com.taveiranet.slidescreen.k9" />
+
+		<receiver
+			android:name="com.taveiranet.slidescreen.k9.SlideScreenK9BroadcastReceiver">
+			<intent-filter>
+				<action android:name="com.fsck.k9.intent.action.EMAIL_RECEIVED" />
+				<data android:scheme="email" android:host="messages" />
+			</intent-filter>
+		</receiver>
+	</application>
+	<uses-permission android:name="com.fsck.k9.permission.READ_MESSAGES"></uses-permission>
+</manifest>

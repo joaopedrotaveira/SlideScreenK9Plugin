@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World!</string>
+    <string name="app_name">Slide Screen K-9 Plugin</string>
+    
+    
+    
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_summary">Information about the plugin</string>
+    
+    <string name="preferences_label">K-9 Plugin Settings</string>
+    <string name="about_label">About K-9 for SlideScreen</string>
+</resources>
