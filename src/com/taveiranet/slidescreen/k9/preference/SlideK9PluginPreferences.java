@@ -20,9 +20,6 @@ import com.taveiranet.slidescreen.k9.SlideK9ContentProvider;
 public class SlideK9PluginPreferences extends PreferenceActivity {
     private static final String TAG = SlideK9PluginPreferences.class.getName();
 
-	
-	private static final int DIALOG_OAUTH = 0x1;
-
 	private SharedPreferences mPrefs;
 
 	@Override
@@ -73,7 +70,7 @@ public class SlideK9PluginPreferences extends PreferenceActivity {
 		about.setTitle(R.string.pref_about_title);
 		about.setSummary(R.string.pref_about_title);
 		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setComponent(new ComponentName("com.taveiranet.slidescreen.k9", "com.taveiranet.slidescreen.k9.preference.AboutActivity"));
+		intent.setComponent(new ComponentName("com.taveiranet.slidescreen.trac", "com.taveiranet.slidescreen.trac.preference.AboutActivity"));
 		about.setIntent(intent);
 		getPreferenceScreen().addPreference(about);
 		

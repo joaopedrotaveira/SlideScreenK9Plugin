@@ -9,8 +9,6 @@ import static com.larvalabs.slidescreen.PluginConstants.FIELD_PRIORITY;
 import static com.larvalabs.slidescreen.PluginConstants.FIELD_TEXT;
 import static com.larvalabs.slidescreen.PluginConstants.FIELD_TITLE;
 
-import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.Map;
 
 import android.content.ContentProvider;
@@ -18,10 +16,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.provider.BaseColumns;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.larvalabs.slidescreen.PluginUtils;
@@ -36,7 +35,6 @@ public class SlideK9ContentProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://com.taveiranet.slidescreen.k9");
     public static final Uri K9CONTENT_INBOX_URI = Uri.parse("content://com.fsck.k9.messageprovider/inbox_messages");
     public static final Uri K9CONTENT_ACCOUNTS_URI = Uri.parse("content://com.fsck.k9.messageprovider/accounts");
-    public static final Uri K9CONTENT_ACCOUNT_UNREAD_URI = Uri.parse("content://com.fsck.k9.messageprovider/account_unread");
 
     public static interface MessageColumns extends BaseColumns {
         /**
@@ -61,7 +59,7 @@ public class SlideK9ContentProvider extends ContentProvider {
          */
         String PREVIEW = "preview";
 
-        String READED = "readed";
+        String UNREAD = "unread";
         String ACCOUNT = "account";
         String URI = "uri";
         String DELETE_URI = "delUri";
@@ -79,7 +77,7 @@ public class SlideK9ContentProvider extends ContentProvider {
         MessageColumns.SENDER,
         MessageColumns.SUBJECT,
         MessageColumns.PREVIEW,
-        MessageColumns.READED,
+        MessageColumns.UNREAD,
         MessageColumns.ACCOUNT,
         MessageColumns.URI,
         MessageColumns.DELETE_URI
@@ -87,6 +85,7 @@ public class SlideK9ContentProvider extends ContentProvider {
     
     public boolean onCreate() {
         Log.d(TAG, "* CREATED.");
+        
         return true;
     }
 
@@ -95,15 +94,14 @@ public class SlideK9ContentProvider extends ContentProvider {
             fields = FIELDS_ARRAY;
         }
         Log.d(TAG, "* QUERY Called.");
-        
+
 		SharedPreferences mPrefs = getContext().getSharedPreferences("k9plugin.prefs", Context.MODE_PRIVATE);
 		Map<String, ?> prefsKeys = mPrefs.getAll();
 		for(String key: prefsKeys.keySet()){
 			Log.d(TAG,"Key: " + key + " value: " + mPrefs.getBoolean(key, false));
 		}
 
-        Cursor mails = getContext().getContentResolver().query(SlideK9ContentProvider.K9CONTENT_INBOX_URI, null, null, null, null);
-        
+        Cursor mails = getContext().getContentResolver().query(SlideK9ContentProvider.K9CONTENT_INBOX_URI, DEFAULT_MESSAGE_PROJECTION, null, null, null);
         MatrixCursor cursor = new MatrixCursor(fields);
         
         for(int i = 0; i < mails.getCount(); i++){
@@ -114,13 +112,13 @@ public class SlideK9ContentProvider extends ContentProvider {
         	long sendDate = mails.getLong(mails.getColumnIndex(MessageColumns.SEND_DATE));
         	String sender = mails.getString(mails.getColumnIndex(MessageColumns.SENDER));
         	String subject = mails.getString(mails.getColumnIndex(MessageColumns.SUBJECT));
-        	String preview = mails.getString(mails.getColumnIndex(MessageColumns.PREVIEW));
+        	//String preview = mails.getString(mails.getColumnIndex(MessageColumns.PREVIEW));
         	String account = mails.getString(mails.getColumnIndex(MessageColumns.ACCOUNT));
         	String messageUri = mails.getString(mails.getColumnIndex(MessageColumns.URI));
-        	String delUri = mails.getString(mails.getColumnIndex(MessageColumns.DELETE_URI));
-        	boolean readed = Boolean.parseBoolean(mails.getString(mails.getColumnIndex(MessageColumns.READED)));
+        	//String delUri = mails.getString(mails.getColumnIndex(MessageColumns.DELETE_URI));
+        	boolean unread = Boolean.parseBoolean(mails.getString(mails.getColumnIndex(MessageColumns.UNREAD)));
 
-        	if(readed) continue;
+        	if(!unread) continue;
         	
         	MatrixCursor.RowBuilder builder = cursor.newRow();
         	long time = sendDate;
@@ -182,6 +180,7 @@ public class SlideK9ContentProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
+    
 
     @Override
     public String getType(Uri uri) {
@@ -203,4 +202,5 @@ public class SlideK9ContentProvider extends ContentProvider {
     public void sendUpdatedNotification() {
         getContext().getContentResolver().notifyChange(CONTENT_URI, null);
     }
+    
 }
