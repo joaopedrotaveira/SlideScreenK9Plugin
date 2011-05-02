@@ -4,7 +4,7 @@
 	android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="3" />
 
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:icon="@drawable/ss_k9_plugin" android:label="@string/app_name">
 
 		<activity android:name=".preference.SlideK9PluginPreferences"
 			android:configChanges="orientation|keyboardHidden" android:label="@string/preferences_label"
